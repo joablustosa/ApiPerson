@@ -5,13 +5,13 @@ using System.Threading;
 using ApiPersonWs.Model;
 using ApiPersonWs.Model.Context;
 
-namespace ApiPersonWs.Services.Implementation
+namespace ApiPersonWs.Repository.Implementation
 {
-    public class PersonBusinessImpl : IPersonBusiness
+    public class PersonRepositoryImpl : IPersonRepository
     {
         private MySQLContext _context;
 
-        public PersonBusinessImpl(MySQLContext context)
+        public PersonRepositoryImpl(MySQLContext context)
         {
             _context = context;
         }
@@ -61,7 +61,7 @@ namespace ApiPersonWs.Services.Implementation
             return person;
         }
 
-        private bool Exist(long id)
+        public bool Exist(long id)
         {
             return _context.Persons.Any(p => p.Id.Equals(id));
         }
@@ -79,6 +79,11 @@ namespace ApiPersonWs.Services.Implementation
             {
                 throw ex;
             }
+        }
+
+        public bool Exists(long id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
