@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApiPersonWs.Model;
+using ApiPersonWs.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace ApiPersonWs.Controllers
 {
@@ -11,22 +8,46 @@ namespace ApiPersonWs.Controllers
     [Route("[controller]")]
     public class PersonsController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        private IPersonService _personService;
+        public PersonsController(IPersonService personService)
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<PersonsController> _logger;
-
-        public PersonsController(ILogger<PersonsController> logger)
-        {
-            _logger = logger;
+            _personService = personService;
         }
 
         [HttpGet]
-        public IEnumerable<PersonsController> Get()
+        public IActionResult Get()
         {
+            return Ok(_personService.FindAll());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(long id)
+        {
+            var person = _personService.FindById(id);
+            if (person == null) return NotFound();
+            return Ok(person);
             
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]Person person)
+        {
+            if (person == null) return BadRequest();
+            return new ObjectResult(_personService.Create(person));
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put([FromBody]Person person)
+        {
+            if (person == null) return BadRequest();
+            return new ObjectResult(_personService.Update(person));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _personService.Delete(id);
+            return NoContent();
         }
     }
 }
