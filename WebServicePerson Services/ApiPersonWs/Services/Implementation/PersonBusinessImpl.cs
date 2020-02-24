@@ -7,11 +7,11 @@ using ApiPersonWs.Model.Context;
 
 namespace ApiPersonWs.Services.Implementation
 {
-    public class PersonServiceImpl : IPersonService
+    public class PersonBusinessImpl : IPersonBusiness
     {
         private MySQLContext _context;
 
-        public PersonServiceImpl(MySQLContext context)
+        public PersonBusinessImpl(MySQLContext context)
         {
             _context = context;
         }
